@@ -42,6 +42,9 @@ TI_BUILD   = ti.TI_BUILD
 class InvalidOptionError(ValueError):
     pass
 
+class InvalidInputError(ValueError):
+    pass
+
 cdef dict _type_names = {
     ti.TI_TYPE_OVERLAY:     b'overlay',
     ti.TI_TYPE_INDICATOR:   b'indicator',
@@ -105,6 +108,12 @@ cdef class _Indicator:
         cdef np.ndarray[np.float64_t, ndim=1, mode='c'] input_ref
 
         for i in range(self.info.inputs):
+            if inputs[i].dtype == np.float64:
+                input_ref = inputs[i][-min_input_len:]
+            elif np.issubdtype(inputs[i].dtype, np.number):
+                input_ref = inputs[i][-min_input_len:].astype(np.float64)
+            else:
+                raise InvalidInputError("Input arrays must have a numeric dtype")
             input_ref = inputs[i][-min_input_len:]
             c_inputs[i] = &input_ref[0]
 
@@ -354,80 +363,83 @@ stderr = _Indicator(75)
 stoch = _Indicator(76)
 
 
-sub = _Indicator(77)
+stochrsi = _Indicator(77)
 
 
-sum = _Indicator(78)
+sub = _Indicator(78)
 
 
-tan = _Indicator(79)
+sum = _Indicator(79)
 
 
-tanh = _Indicator(80)
+tan = _Indicator(80)
 
 
-tema = _Indicator(81)
+tanh = _Indicator(81)
 
 
-todeg = _Indicator(82)
+tema = _Indicator(82)
 
 
-torad = _Indicator(83)
+todeg = _Indicator(83)
 
 
-tr = _Indicator(84)
+torad = _Indicator(84)
 
 
-trima = _Indicator(85)
+tr = _Indicator(85)
 
 
-trix = _Indicator(86)
+trima = _Indicator(86)
 
 
-trunc = _Indicator(87)
+trix = _Indicator(87)
 
 
-tsf = _Indicator(88)
+trunc = _Indicator(88)
 
 
-typprice = _Indicator(89)
+tsf = _Indicator(89)
 
 
-ultosc = _Indicator(90)
+typprice = _Indicator(90)
 
 
-var = _Indicator(91)
+ultosc = _Indicator(91)
 
 
-vhf = _Indicator(92)
+var = _Indicator(92)
 
 
-vidya = _Indicator(93)
+vhf = _Indicator(93)
 
 
-volatility = _Indicator(94)
+vidya = _Indicator(94)
 
 
-vosc = _Indicator(95)
+volatility = _Indicator(95)
 
 
-vwma = _Indicator(96)
+vosc = _Indicator(96)
 
 
-wad = _Indicator(97)
+vwma = _Indicator(97)
 
 
-wcprice = _Indicator(98)
+wad = _Indicator(98)
 
 
-wilders = _Indicator(99)
+wcprice = _Indicator(99)
 
 
-willr = _Indicator(100)
+wilders = _Indicator(100)
 
 
-wma = _Indicator(101)
+willr = _Indicator(101)
 
 
-zlema = _Indicator(102)
+wma = _Indicator(102)
+
+
+zlema = _Indicator(103)
 
